@@ -1,5 +1,5 @@
 # wal-major-mode
-An Emacs major mode for WAL
+An Emacs major mode for [WAL](https://github.com/ics-jku/wal).
 
 ## Installation
 To install clone this repository and add the directory to your emacs `load-path` in your emacs init file.

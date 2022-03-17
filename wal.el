@@ -98,7 +98,7 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (backward-sexp)
   (setq start (point))
   (goto-char end)
-  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring start end)))
+  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
   (wal-eval-sexpr sexpr))
 
 (defun wal-eval-sexpr-forward ()
@@ -107,23 +107,25 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (forward-sexp)
   (setq end (point))
   (goto-char start)
-  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring start end)))
+  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
   (wal-eval-sexpr sexpr))
 
 (defun wal-eval-buffer ()
   (interactive)
   (setq buffer-content (buffer-substring-no-properties 1 (buffer-size)))
+  ;; wrap everything in a do function
+  (setq sexpr (concat "(do " buffer-content ")"))
+  ;; remove interpreter line
+  (setq sexpr (replace-regexp-in-string "#\!.*\n" "" sexpr))
+  (wal-eval-sexpr sexpr))
+
+(defun wal-eval-sexpr (sexpr)
   ;; remove comments and blank lines
-  (setq sexpr (replace-regexp-in-string ";.*\n\\|^[[:space:]]+$" "" buffer-content))
+  (setq sexpr (replace-regexp-in-string ";.*\n\\|^[[:space:]]+$" "" sexpr))
   ;; remove line breaks
   (setq sexpr (replace-regexp-in-string "\n" " " sexpr))
   ;; remove unnecessary whitespace
   (setq sexpr (replace-regexp-in-string "[[:space:]]+" " " sexpr))
-  ;; wrap everything in a do function
-  (setq sexpr (concat "(do " sexpr ")"))
-  (wal-eval-sexpr sexpr))
-
-(defun wal-eval-sexpr (sexpr)
   (with-current-buffer (get-buffer "*WAL*")  
     (comint-send-string "*WAL*" sexpr)
     (comint-send-input)))

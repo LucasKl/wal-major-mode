@@ -48,4 +48,50 @@
 (define-derived-mode wal-mode prog-mode "WAL Mode"
   :syntax-table wal-mode-syntax-table
   (setq font-lock-defaults '(wal-highlights))
-  (font-lock-fontify-buffer))
+  (font-lock-fontify-buffer)
+  (local-set-key (kbd "M-<tab>") 'wal-complete-symbol))
+
+(add-to-list 'auto-mode-alist '("\\.wal\\'" . wal-mode))
+
+;; Completion
+(require 'ido) ; part of emacs
+
+;; this is your lang's keywords
+(setq wal-keywords
+      '("!" "atom?" "fold" "int?" "range" "symbol?" "!="
+	"average" "fold/signal" "lambda" "require" "type"
+	"&&" "call" "for" "last" "resolve-group"
+	"unalias" "*" "case" "get" "length"
+	"resolve-scope" "unless" "**" "cond" "geta"
+	"let" "rest" "unload" "+" "convert/bin     geta/default"
+	"letret" "reval" "unset-scope" "-" "count"
+	"groups" "list" "second" "when" "/"
+	"defun" "help" "list?" "set" "whenever"
+	"<" "do" "if" "load" "set-scope"
+	"while" "<=" "eval" "import" "map"
+	"seta" "zip" "=" "exit" "in"
+	"mapa" "slice" "||" ">" "fdiv"
+	"in-group" "max" "step" ">=" "find"
+	"in-groups" "min" "string->int" "alias" "find/g"
+	"in-scope" "print" "string?" "all-scopes" "first"
+	"inc" "printf" "sum" "array" "fn"
+	"int->string" "quote" "symbol->string"))
+
+(defun wal-complete-symbol ()
+  "Perform keyword completion on current symbol.
+This uses `ido-mode' user interface for completion."
+  (interactive)
+  (let* (
+         ($bds (bounds-of-thing-at-point 'symbol))
+         ($p1 (car $bds))
+         ($p2 (cdr $bds))
+         ($current-sym
+          (if  (or (null $p1) (null $p2) (equal $p1 $p2))
+              ""
+            (buffer-substring-no-properties $p1 $p2)))
+         $result-sym)
+    (when (not $current-sym) (setq $current-sym ""))
+    (setq $result-sym
+          (ido-completing-read "" wal-keywords nil nil $current-sym ))
+    (delete-region $p1 $p2)
+    (insert $result-sym)))

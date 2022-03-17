@@ -8,7 +8,7 @@ To install clone this repository and add the directory to your emacs `load-path`
     (require 'wal)
 
 ## Usage
-Once installed the WAL major mode should automatically start once you open a ".wal" file, if not it can be started with .
+Once installed the WAL major mode should automatically start once you open a ".wal" file, if not it can be started with `wal-mode`.
 To start the WAL interpreter execute `run-wal`.
 The current buffer can be evaluated using `wal-eval-buffer`.
 

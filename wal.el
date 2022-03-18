@@ -5,8 +5,8 @@
 ;; Author: Lucas Klemmer <lucas.klemmer@jku.at>
 ;; Keywords: languages
 ;; URL: https://github.com/LucasKl/wal-major-mode
-
 ;; Version: 1.0
+;; Package-Requires: ((emacs "24.1"))
 
 ;;; License:
 
@@ -41,6 +41,7 @@
 ;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ;;; Commentary:
+;; An Emacs major mode for WAL.
 
 ;;; Code:
 
@@ -52,7 +53,7 @@
     ;; ; is a comment starter
     (modify-syntax-entry ?\; "<" table)
     ;; \n is a comment ender
-    (modify-syntax-entry ?\n ">" table)    
+    (modify-syntax-entry ?\n ">" table)
     table))
 
 (setq wal-op-arithmetic '("+" "-" "*" "/" "fdiv" "**") )
@@ -64,7 +65,6 @@
 (setq wal-op-control-flow '("if" "cond" "when" "unless" "while" "for") )
 (setq wal-op-special '("whenever" "find" "count" "groups" "in-group" "in-groups"
 			    "in-scope" "in-scopes" "resolve-group" "resolve-scope") )
-
 
 (setq wal-keywords-regexp (regexp-opt wal-op-keywords 'words))
 (setq wal-arithmetic-regexp (regexp-opt wal-op-arithmetic 'words))
@@ -117,7 +117,7 @@
 
 (defun wal-complete-symbol ()
   "Perform keyword completion on current symbol.
-This uses `ido-mode' user interface for completion.
+This uses variable `ido-mode' user interface for completion.
 Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (interactive)
   (let* (
@@ -137,6 +137,7 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
 
 ;; ------------------------------ WAL eval ------------------------------
 (defun wal-eval-sexpr-behind ()
+  "Evaluate the sexpr behind point."
   (interactive)
   (setq end (point))
   (backward-sexp)
@@ -146,6 +147,7 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (wal-eval-sexpr sexpr))
 
 (defun wal-eval-sexpr-forward ()
+  "Evaluate the sexpr in front of point."
   (interactive)
   (setq start (point))
   (forward-sexp)
@@ -155,6 +157,7 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (wal-eval-sexpr sexpr))
 
 (defun wal-eval-buffer ()
+  "Evaluate the complete buffer in the WAL process."
   (interactive)
   (setq buffer-content (buffer-substring-no-properties 1 (buffer-size)))
   ;; wrap everything in a do function
@@ -164,13 +167,14 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (wal-eval-sexpr sexpr))
 
 (defun wal-eval-sexpr (sexpr)
+  "Send the SEXPR to the WAL process."
   ;; remove comments and blank lines
   (setq sexpr (replace-regexp-in-string ";.*\n\\|^[[:space:]]+$" "" sexpr))
   ;; remove line breaks
   (setq sexpr (replace-regexp-in-string "\n" " " sexpr))
   ;; remove unnecessary whitespace
   (setq sexpr (replace-regexp-in-string "[[:space:]]+" " " sexpr))
-  (with-current-buffer (get-buffer "*WAL*")  
+  (with-current-buffer (get-buffer "*WAL*")
     (comint-send-string "*WAL*" sexpr)
     (comint-send-input)))
 
@@ -187,21 +191,22 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
 (defvar wal-prompt-regexp "^>->" "WAL Prompt >->.")
 
 (defvar wal-cli-arguments '()
-  "Commandline arguments to pass to `wal-cli'")
+  "Commandline arguments to pass to `wal-cli'.")
 
 (defvar wal-mode-map
   (let ((map (nconc (make-sparse-keymap) comint-mode-map)))
     ;; example definition
     (define-key map "\t" 'completion-at-point)
     map)
-  "Basic mode map for `run-wal'")
+  "Basic mode map for `run-wal'.")
 
 (defun wal-repl-initialize ()
-  "Helper function to initialize WAL"
+  "Helper function to initialize WAL."
   (setq comint-process-echoes t)
   (setq comint-use-prompt-regexp t))
 
 (defun run-wal ()
+  "Start a WAL REPL and connects to it in a buffer called *WAL*."
   (interactive)
   (setq wal-repl-buffer (get-buffer-create "*WAL*"))
   (apply 'make-comint-in-buffer "Wal" wal-repl-buffer

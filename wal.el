@@ -182,7 +182,7 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
 (define-derived-mode wal-mode scheme-mode "WAL Mode"
   :syntax-table wal-mode-syntax-table
   (setq font-lock-defaults '(wal-highlights))
-  (font-lock-fontify-buffer)
+  (font-lock-ensure)
   (local-set-key (kbd "M-<tab>") 'wal-complete-symbol)
   (local-set-key (kbd "C-x C-e") 'wal-eval-sexpr-behind)
   (local-set-key (kbd "C-M-x") 'wal-eval-sexpr-forward))

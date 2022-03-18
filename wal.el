@@ -1,4 +1,13 @@
-(provide 'wal)
+;;; wal.el --- A major mode for the WAL programming language  -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2022  Lucas Klemmer
+
+;; Author: Lucas Klemmer
+;; Keywords: languages
+
+;;; Commentary:
+
+;;; Code:
 
 (defconst wal-mode-syntax-table
   (let ((table (make-syntax-table)))
@@ -180,5 +189,6 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (set (make-local-variable 'paragraph-start) wal-prompt-regexp))
 
 (add-hook 'wal-repl-mode-hook 'wal-repl-initialize)
-;(add-to-list 'auto-mode-alist '("*WAL*" . wal-repl-mode))
 
+(provide 'wal)
+;;; wal.el ends here

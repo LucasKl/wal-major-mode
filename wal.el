@@ -139,32 +139,35 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
 (defun wal-eval-sexpr-behind ()
   "Evaluate the sexpr behind point."
   (interactive)
-  (setq end (point))
-  (backward-sexp)
-  (setq start (point))
-  (goto-char end)
-  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
-  (wal-eval-sexpr sexpr))
+  (let (start end sexpr)
+    (setq end (point))
+    (backward-sexp)
+    (setq start (point))
+    (goto-char end)
+    (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
+    (wal-eval-sexpr sexpr)))
 
 (defun wal-eval-sexpr-forward ()
   "Evaluate the sexpr in front of point."
   (interactive)
-  (setq start (point))
-  (forward-sexp)
-  (setq end (point))
-  (goto-char start)
-  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
-  (wal-eval-sexpr sexpr))
+  (let (start end sexpr)
+    (setq start (point))
+    (forward-sexp)
+    (setq end (point))
+    (goto-char start)
+    (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
+    (wal-eval-sexpr sexpr)))
 
 (defun wal-eval-buffer ()
   "Evaluate the complete buffer in the WAL process."
   (interactive)
-  (setq buffer-content (buffer-substring-no-properties 1 (buffer-size)))
-  ;; wrap everything in a do function
-  (setq sexpr (concat "(do " buffer-content ")"))
-  ;; remove interpreter line
-  (setq sexpr (replace-regexp-in-string "#\!.*\n" "" sexpr))
-  (wal-eval-sexpr sexpr))
+  (let (buffer-content sexpr)
+    (setq buffer-content (buffer-substring-no-properties 1 (buffer-size)))
+    ;; wrap everything in a do function
+    (setq sexpr (concat "(do " buffer-content ")"))
+    ;; remove interpreter line
+    (setq sexpr (replace-regexp-in-string "#\!.*\n" "" sexpr))
+    (wal-eval-sexpr sexpr)))
 
 (defun wal-eval-sexpr (sexpr)
   "Send the SEXPR to the WAL process."
@@ -208,10 +211,11 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
 (defun run-wal ()
   "Start a WAL REPL and connects to it in a buffer called *WAL*."
   (interactive)
-  (setq wal-repl-buffer (get-buffer-create "*WAL*"))
-  (apply 'make-comint-in-buffer "Wal" wal-repl-buffer
-         "wal" '())
-  (display-buffer "*WAL*"))
+  (let (wal-repl-buffer)
+    (setq wal-repl-buffer (get-buffer-create "*WAL*"))
+    (apply 'make-comint-in-buffer "Wal" wal-repl-buffer
+           "wal" '())
+    (display-buffer "*WAL*")))
 
 (define-derived-mode wal-repl-mode comint-mode "Wal"
   "Major mode for `run-wal'.

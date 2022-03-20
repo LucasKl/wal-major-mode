@@ -6,7 +6,7 @@
 ;; Keywords: languages
 ;; URL: https://github.com/LucasKl/wal-major-mode
 ;; Version: 1.0
-;; Package-Requires: ((emacs "24.1"))
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; License:
 
@@ -121,17 +121,17 @@ This uses variable `ido-mode' user interface for completion.
 Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (interactive)
   (let* (
-         ($bds (bounds-of-thing-at-point 'symbol))
-         ($p1 (car $bds))
-         ($p2 (cdr $bds))
-         ($current-sym
-          (if  (or (null $p1) (null $p2) (equal $p1 $p2))
-              ""
-            (buffer-substring-no-properties $p1 $p2)))
-         $result-sym)
+	 ($bds (bounds-of-thing-at-point 'symbol))
+	 ($p1 (car $bds))
+	 ($p2 (cdr $bds))
+	 ($current-sym
+	  (if  (or (null $p1) (null $p2) (equal $p1 $p2))
+	      ""
+	    (buffer-substring-no-properties $p1 $p2)))
+	 $result-sym)
     (when (not $current-sym) (setq $current-sym ""))
     (setq $result-sym
-          (ido-completing-read "" wal-keywords nil nil $current-sym ))
+	  (ido-completing-read "" wal-keywords nil nil $current-sym ))
     (delete-region $p1 $p2)
     (insert $result-sym)))
 
@@ -201,20 +201,20 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
     ;; example definition
     (define-key map "\t" 'completion-at-point)
     map)
-  "Basic mode map for `run-wal'.")
+  "Basic mode map for `wal-run'.")
 
 (defun wal-repl-initialize ()
   "Helper function to initialize WAL."
   (setq comint-process-echoes t)
   (setq comint-use-prompt-regexp t))
 
-(defun run-wal ()
+(defun wal-run ()
   "Start a WAL REPL and connects to it in a buffer called *WAL*."
   (interactive)
   (let (wal-repl-buffer)
     (setq wal-repl-buffer (get-buffer-create "*WAL*"))
-    (apply 'make-comint-in-buffer "Wal" wal-repl-buffer
-           "wal" '())
+    (apply #'make-comint-in-buffer "Wal" wal-repl-buffer
+	   "wal" '())
     (display-buffer "*WAL*")))
 
 (define-derived-mode wal-repl-mode comint-mode "Wal"
@@ -229,10 +229,8 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (setq comint-prompt-read-only t)
   ;; this makes it so commands like M-{ and M-} work.
   (set (make-local-variable 'paragraph-separate) "\\'")
-  ;(set (make-local-variable 'font-lock-defaults) '(wal-font-lock-keywords t))
-  (set (make-local-variable 'paragraph-start) wal-prompt-regexp))
-
-(add-hook 'wal-repl-mode-hook 'wal-repl-initialize)
+  (set (make-local-variable 'paragraph-start) wal-prompt-regexp)
+  (wal-repl-initialize))
 
 (provide 'wal)
 ;;; wal.el ends here

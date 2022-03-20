@@ -56,64 +56,64 @@
     (modify-syntax-entry ?\n ">" table)
     table))
 
-(setq wal-op-arithmetic '("+" "-" "*" "/" "fdiv" "**") )
-(setq wal-op-logical '(">" "<" "=" "<=" ">=" "&&" "||") )
-(setq wal-op-keywords '("print" "printf" "set" "let" "call" "import"
-		     "require" "defun" "list" "first" "second"
-		     "slice" "array" "rest" "map" "mapa"
-		     "eval" "quote" "get" "seta" "geta") )
-(setq wal-op-control-flow '("if" "cond" "when" "unless" "while" "for") )
-(setq wal-op-special '("whenever" "find" "count" "groups" "in-group" "in-groups"
-			    "in-scope" "in-scopes" "resolve-group" "resolve-scope") )
+(defconst wal-op-arithmetic '("+" "-" "*" "/" "fdiv" "**") )
+(defconst wal-op-logical '(">" "<" "=" "<=" ">=" "&&" "||") )
+(defconst wal-op-keywords '("print" "printf" "set" "let" "call" "import"
+			    "require" "defun" "list" "first" "second"
+			    "slice" "array" "rest" "map" "mapa"
+			    "eval" "quote" "get" "seta" "geta") )
+(defconst wal-op-control-flow '("if" "cond" "when" "unless" "while" "for") )
+(defconst wal-op-special '("whenever" "find" "count" "groups" "in-group" "in-groups"
+			   "in-scope" "in-scopes" "resolve-group" "resolve-scope") )
 
-(setq wal-keywords-regexp (regexp-opt wal-op-keywords 'words))
-(setq wal-arithmetic-regexp (regexp-opt wal-op-arithmetic 'words))
-(setq wal-logical-regexp (regexp-opt wal-op-logical 'words))
-(setq wal-control-flow-regexp (regexp-opt wal-op-control-flow 'words))
-(setq wal-special-regexp (regexp-opt wal-op-special 'words))
+(defconst wal-keywords-regexp (regexp-opt wal-op-keywords 'words))
+(defconst wal-arithmetic-regexp (regexp-opt wal-op-arithmetic 'words))
+(defconst wal-logical-regexp (regexp-opt wal-op-logical 'words))
+(defconst wal-control-flow-regexp (regexp-opt wal-op-control-flow 'words))
+(defconst wal-special-regexp (regexp-opt wal-op-special 'words))
 
-(setq wal-highlights
-      `(;; Color function definitions
-	("defun \\([/[:alnum:].-]+\\)" 1 'font-lock-function-name-face)
-	(,wal-keywords-regexp . font-lock-keyword-face)
-	(,wal-arithmetic-regexp . font-lock-keyword-face)
-	(,wal-logical-regexp . font-lock-keyword-face)
-	(,wal-control-flow-regexp . font-lock-keyword-face)
-	(,wal-special-regexp . font-lock-type-face)
+(defconst wal-highlights
+  `(;; Color function definitions
+    ("defun \\([/[:alnum:].-]+\\)" 1 'font-lock-function-name-face)
+    (,wal-keywords-regexp . font-lock-keyword-face)
+    (,wal-arithmetic-regexp . font-lock-keyword-face)
+    (,wal-logical-regexp . font-lock-keyword-face)
+    (,wal-control-flow-regexp . font-lock-keyword-face)
+    (,wal-special-regexp . font-lock-type-face)
 
-	;; Color constants
-	("#t\\|#f" . font-lock-constant-face)
-	;; Color user function calls
-	("\(\s*\\(\\w+\\)\s" 1 'font-lock-builtin-face)
-	;; Color variable bindings
-	("\\(set\\|let\\|for\\) \\[\\(\\w+\\)\s" 2 'font-lock-variable-name-face)
-	;; Color timed evaluation - for now only integers and symbols
-	("[@#~][/[:alnum:].-]+" . font-lock-string-face)
-	;; Color numbers
-	("-?[[:digit:]]+" . font-lock-constant-face)))
+    ;; Color constants
+    ("#t\\|#f" . font-lock-constant-face)
+    ;; Color user function calls
+    ("\(\s*\\(\\w+\\)\s" 1 'font-lock-builtin-face)
+    ;; Color variable bindings
+    ("\\(set\\|let\\|for\\) \\[\\(\\w+\\)\s" 2 'font-lock-variable-name-face)
+    ;; Color timed evaluation - for now only integers and symbols
+    ("[@#~][/[:alnum:].-]+" . font-lock-string-face)
+    ;; Color numbers
+    ("-?[[:digit:]]+" . font-lock-constant-face)))
 
 (add-to-list 'auto-mode-alist '("\\.wal\\'" . wal-mode))
 
 ;; ------------------------------ Completion ------------------------------
-(setq wal-keywords
-      '("!" "atom?" "fold" "int?" "range" "symbol?" "!="
-	"average" "fold/signal" "lambda" "require" "type"
-	"&&" "call" "for" "last" "resolve-group"
-	"unalias" "*" "case" "get" "length"
-	"resolve-scope" "unless" "**" "cond" "geta"
-	"let" "rest" "unload" "+" "convert/bin" "geta/default"
-	"letret" "reval" "unset-scope" "-" "count"
-	"groups" "list" "second" "when" "/"
-	"defun" "help" "list?" "set" "whenever"
-	"<" "do" "if" "load" "set-scope"
-	"while" "<=" "eval" "import" "map"
-	"seta" "zip" "=" "exit" "in"
-	"mapa" "slice" "||" ">" "fdiv"
-	"in-group" "max" "step" ">=" "find"
-	"in-groups" "min" "string->int" "alias" "find/g"
-	"in-scope" "print" "string?" "all-scopes" "first"
-	"inc" "printf" "sum" "array" "fn"
-	"int->string" "quote" "symbol->string"))
+(defconst wal-keywords
+  '("!" "atom?" "fold" "int?" "range" "symbol?" "!="
+    "average" "fold/signal" "lambda" "require" "type"
+    "&&" "call" "for" "last" "resolve-group"
+    "unalias" "*" "case" "get" "length"
+    "resolve-scope" "unless" "**" "cond" "geta"
+    "let" "rest" "unload" "+" "convert/bin" "geta/default"
+    "letret" "reval" "unset-scope" "-" "count"
+    "groups" "list" "second" "when" "/"
+    "defun" "help" "list?" "set" "whenever"
+    "<" "do" "if" "load" "set-scope"
+    "while" "<=" "eval" "import" "map"
+    "seta" "zip" "=" "exit" "in"
+    "mapa" "slice" "||" ">" "fdiv"
+    "in-group" "max" "step" ">=" "find"
+    "in-groups" "min" "string->int" "alias" "find/g"
+    "in-scope" "print" "string?" "all-scopes" "first"
+    "inc" "printf" "sum" "array" "fn"
+    "int->string" "quote" "symbol->string"))
 
 (defun wal-complete-symbol ()
   "Perform keyword completion on current symbol.
@@ -139,32 +139,35 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
 (defun wal-eval-sexpr-behind ()
   "Evaluate the sexpr behind point."
   (interactive)
-  (setq end (point))
-  (backward-sexp)
-  (setq start (point))
-  (goto-char end)
-  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
-  (wal-eval-sexpr sexpr))
+  (let (start end sexpr)
+    (setq end (point))
+    (backward-sexp)
+    (setq start (point))
+    (goto-char end)
+    (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
+    (wal-eval-sexpr sexpr)))
 
 (defun wal-eval-sexpr-forward ()
   "Evaluate the sexpr in front of point."
   (interactive)
-  (setq start (point))
-  (forward-sexp)
-  (setq end (point))
-  (goto-char start)
-  (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
-  (wal-eval-sexpr sexpr))
+  (let (start end sexpr)
+    (setq start (point))
+    (forward-sexp)
+    (setq end (point))
+    (goto-char start)
+    (setq sexpr (replace-regexp-in-string "\n" " " (buffer-substring-no-properties start end)))
+    (wal-eval-sexpr sexpr)))
 
 (defun wal-eval-buffer ()
   "Evaluate the complete buffer in the WAL process."
   (interactive)
-  (setq buffer-content (buffer-substring-no-properties 1 (buffer-size)))
-  ;; wrap everything in a do function
-  (setq sexpr (concat "(do " buffer-content ")"))
-  ;; remove interpreter line
-  (setq sexpr (replace-regexp-in-string "#\!.*\n" "" sexpr))
-  (wal-eval-sexpr sexpr))
+  (let (buffer-content sexpr)
+    (setq buffer-content (buffer-substring-no-properties 1 (buffer-size)))
+    ;; wrap everything in a do function
+    (setq sexpr (concat "(do " buffer-content ")"))
+    ;; remove interpreter line
+    (setq sexpr (replace-regexp-in-string "#\!.*\n" "" sexpr))
+    (wal-eval-sexpr sexpr)))
 
 (defun wal-eval-sexpr (sexpr)
   "Send the SEXPR to the WAL process."
@@ -208,10 +211,11 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
 (defun run-wal ()
   "Start a WAL REPL and connects to it in a buffer called *WAL*."
   (interactive)
-  (setq wal-repl-buffer (get-buffer-create "*WAL*"))
-  (apply 'make-comint-in-buffer "Wal" wal-repl-buffer
-         "wal" '())
-  (display-buffer "*WAL*"))
+  (let (wal-repl-buffer)
+    (setq wal-repl-buffer (get-buffer-create "*WAL*"))
+    (apply 'make-comint-in-buffer "Wal" wal-repl-buffer
+           "wal" '())
+    (display-buffer "*WAL*")))
 
 (define-derived-mode wal-repl-mode comint-mode "Wal"
   "Major mode for `run-wal'.

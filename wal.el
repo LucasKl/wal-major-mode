@@ -92,6 +92,7 @@
     ;; Color numbers
     ("-?[[:digit:]]+" . font-lock-constant-face)))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.wal\\'" . wal-mode))
 
 ;; ------------------------------ Completion ------------------------------
@@ -182,6 +183,7 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
     (comint-send-input)))
 
 ;; Create Major Mode
+;;;###autoload
 (define-derived-mode wal-mode scheme-mode "WAL Mode"
   :syntax-table wal-mode-syntax-table
   (setq font-lock-defaults '(wal-highlights))

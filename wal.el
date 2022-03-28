@@ -46,6 +46,7 @@
 ;;; Code:
 
 (require 'ido)
+(require 'comint)
 
 ;; ------------------------------ Highlighting ------------------------------
 (defconst wal-mode-syntax-table

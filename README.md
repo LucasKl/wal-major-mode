@@ -5,7 +5,7 @@ An Emacs major mode for [WAL](https://github.com/ics-jku/wal).
 To install clone this repository and add the directory to your emacs `load-path` in your emacs init file.
 
     (add-to-list 'load-path "~/path/to/wal-major-mode/")
-    (require 'wal)
+    (require 'wal-mode)
 
 ## Usage
 Once installed the WAL major mode should automatically start once you open a ".wal" file, if not it can be started with `wal-mode`.

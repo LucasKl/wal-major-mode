@@ -1,4 +1,4 @@
-;;; wal.el --- A major mode for the WAL programming language  -*- lexical-binding: t; -*-
+;;; wal-mode.el --- A major mode for the WAL programming language  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022  Lucas Klemmer
 
@@ -235,5 +235,5 @@ Source: http://xahlee.info/emacs/emacs/elisp_keyword_completion.html"
   (set (make-local-variable 'paragraph-start) wal-prompt-regexp)
   (wal-repl-initialize))
 
-(provide 'wal)
-;;; wal.el ends here
+(provide 'wal-mode)
+;;; wal-mode.el ends here
